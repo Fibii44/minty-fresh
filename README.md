@@ -1,59 +1,167 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# MintyFresh Cleaning
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A premium cleaning service booking platform built with **Laravel 12**, **Inertia.js**, and **React**. Customers can get an instant price estimate, choose add-ons, schedule their appointment, and pay securely via **Stripe** — all in one seamless multi-step wizard.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Multi-step Booking Wizard** — Service selection, add-ons, scheduling, and payment in 4 guided steps
+- **Real-time Price Calculator** — Total updates instantly based on service type, rooms, add-ons, and frequency discount
+- **Stripe Payments** — Secure card payments via Stripe Elements (PCI-compliant)
+- **Location Autocomplete** — Philippine city/province/zip code search with instant dropdown
+- **Booking Confirmation Email** — Automatic confirmation email sent to the customer after booking
+- **Admin Dashboard** — Manage bookings, assign cleaners, and update statuses
+- **Cleaner Preference** — Customers can request a specific cleaner from the active roster
+- **Fully Responsive** — Works on mobile, tablet, and desktop
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+| Layer | Technology |
+|---|---|
+| Backend | Laravel 12 (PHP 8.2) |
+| Frontend | React 18 + Inertia.js |
+| Styling | Vanilla CSS (custom design system) |
+| Database | PostgreSQL (via Supabase) |
+| Payments | Stripe (Elements + Charges API) |
+| Email | Laravel Mailable + Markdown templates |
+| Build Tool | Vite |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Getting Started
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Requirements
 
-### Premium Partners
+- PHP 8.2+
+- Composer
+- Node.js 18+
+- PostgreSQL database
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Installation
 
-## Contributing
+```bash
+# 1. Clone the repository
+git clone https://github.com/Fibii44/minty-fresh.git
+cd minty-fresh
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# 2. Install PHP dependencies
+composer install
 
-## Code of Conduct
+# 3. Install JS dependencies
+npm install
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 4. Copy and configure environment
+cp .env.example .env
+php artisan key:generate
+```
 
-## Security Vulnerabilities
+### Environment Configuration
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Open `.env` and fill in your credentials:
+
+```env
+# Database (PostgreSQL / Supabase)
+DB_CONNECTION=pgsql
+DB_HOST=your-db-host
+DB_PORT=5432
+DB_DATABASE=postgres
+DB_USERNAME=your-username
+DB_PASSWORD=your-password
+
+# Stripe (get keys from dashboard.stripe.com/test/apikeys)
+STRIPE_KEY=pk_test_...
+STRIPE_SECRET=sk_test_...
+
+# Mail (use Mailtrap for testing: mailtrap.io)
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=your-mailtrap-username
+MAIL_PASSWORD=your-mailtrap-password
+MAIL_FROM_ADDRESS="hello@mintyfresh.com"
+MAIL_FROM_NAME="MintyFresh Cleaning"
+```
+
+### Run Migrations & Seeders
+
+```bash
+php artisan migrate
+php artisan db:seed  # Seeds sample cleaners
+```
+
+### Start Development Servers
+
+```bash
+# Terminal 1 — Laravel
+php artisan serve
+
+# Terminal 2 — Vite (React)
+npm run dev
+```
+
+Visit **http://localhost:8000**
+
+---
+
+## Testing Stripe Payments
+
+The app is configured for Stripe Test Mode by default. Use these test card numbers on the booking form:
+
+| Card Number | Result |
+|---|---|
+| `4242 4242 4242 4242` | Payment succeeds |
+| `4000 0000 0000 0002` | Card declined |
+| `4000 0025 0000 3155` | Requires 3D Secure |
+
+Use any future expiry date, any 3-digit CVC, and any 5-digit ZIP.
+
+---
+
+## Project Structure
+
+```
+app/
+├── Http/Controllers/
+│   ├── BookingController.php   # Handles booking form + Stripe charge
+│   └── DashboardController.php # Admin dashboard data
+├── Mail/
+│   └── BookingConfirmationMail.php
+├── Models/
+│   ├── Booking.php
+│   ├── Cleaner.php
+│   └── User.php
+
+resources/
+├── js/
+│   ├── Components/Welcome/
+│   │   └── PricingWizard.jsx   # Main 4-step booking wizard
+│   └── Pages/
+│       ├── Book.jsx            # Stripe Elements wrapper
+│       ├── BookingConfirmed.jsx
+│       ├── Dashboard.jsx       # Admin panel
+│       └── Welcome.jsx         # Landing page
+├── views/emails/
+│   └── booking-confirmation.blade.php
+
+routes/
+└── web.php
+```
+
+---
+
+## Going Live (Production)
+
+1. Complete Stripe account onboarding at [dashboard.stripe.com](https://dashboard.stripe.com)
+2. Switch `.env` keys from `pk_test_` / `sk_test_` to `pk_live_` / `sk_live_`
+3. Configure a production mail provider (e.g. Resend, SendGrid, Postmark)
+4. Run `npm run build` to generate optimized assets
+5. Set `APP_ENV=production` and `APP_DEBUG=false`
+
+---
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is proprietary software built for a private client. All rights reserved.
