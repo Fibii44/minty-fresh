@@ -6,6 +6,13 @@ WORKDIR /var/www/html
 # Copy all application files (including local public/build compiled assets)
 COPY . .
 
+# Set write permissions for Laravel storage and cache directories
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache && \
+    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Ensure startup scripts are executable
+RUN chmod +x /var/www/html/scripts/*.sh
+
 # Install PHP dependencies in production mode
 RUN composer install --no-dev --optimize-autoloader
 
