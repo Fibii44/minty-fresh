@@ -5,7 +5,7 @@ services:
     plan: free
     dockerFilePath: Dockerfile
     # Run database migrations automatically on every deployment release
-    releaseCommand: php artisan migrate --force
+    preDeployCommand: php artisan migrate --force
     envVars:
       - key: APP_ENV
         value: production
