@@ -3,7 +3,6 @@ services:
     name: mintyfresh-web
     env: docker
     plan: free
-    dockerfile: Dockerfile
     # Run database migrations automatically on every deployment release
     preDeployCommand: php artisan migrate --force
     envVars:
