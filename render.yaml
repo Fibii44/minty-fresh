@@ -26,3 +26,5 @@ services:
         value: cookie
       - key: CACHE_STORE
         value: database
+      - key: PHP_CATCHALL
+        value: "true"
