@@ -7,7 +7,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Serve the application using richarvey/nginx-php-fpm
-FROM richarvey/nginx-php-fpm:php82
+FROM richarvey/nginx-php-fpm:latest
 
 # Set work directory
 WORKDIR /var/www/html
