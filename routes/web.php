@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\CleanerController;
 use App\Models\Cleaner;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -52,6 +53,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/bookings/{booking}/assign', [BookingController::class, 'assignCleaner'])->name('bookings.assign');
     Route::patch('/bookings/{booking}/status', [BookingController::class, 'updateStatus'])->name('bookings.status');
     Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->name('bookings.destroy');
+
+    // Admin Cleaner management
+    Route::get('/cleaners', [CleanerController::class, 'index'])->name('cleaners.index');
+    Route::post('/cleaners', [CleanerController::class, 'store'])->name('cleaners.store');
+    Route::patch('/cleaners/{cleaner}', [CleanerController::class, 'update'])->name('cleaners.update');
+    Route::delete('/cleaners/{cleaner}', [CleanerController::class, 'destroy'])->name('cleaners.destroy');
 });
 
 require __DIR__.'/auth.php';

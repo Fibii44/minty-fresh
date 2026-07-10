@@ -21,9 +21,7 @@ export default function Hero({ scrollToBooking }) {
                 
                 {/* Left Column: Text Content */}
                 <div className="lg:col-span-7 space-y-6 text-left">
-                    <span className="text-sm font-extrabold text-[#2C7A00] tracking-wider uppercase block">
-                        🍃 Quality cleaning at a fair price.
-                    </span>
+
                     
                     <h1 className="sparkle-heading text-4xl sm:text-5xl md:text-6xl font-black text-[#1F3612] leading-tight">
                         Specialized, efficient, and thorough cleaning services

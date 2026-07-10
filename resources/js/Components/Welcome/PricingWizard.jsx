@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
+import { useStripe, useElements, CardNumberElement, CardExpiryElement, CardCvcElement } from '@stripe/react-stripe-js';
 
 const PHILIPPINE_LOCATIONS = [
     { city: 'Bacoor, Cavite', zip_code: '4102' },
@@ -65,6 +65,9 @@ export default function PricingWizard({
     const stripe = useStripe();
     const elements = useElements();
     const [showDropdown, setShowDropdown] = useState(false);
+    const [cardholderName, setCardholderName] = useState('');
+    const [country, setCountry] = useState('PH');
+    const [cardError, setCardError] = useState('');
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -79,19 +82,23 @@ export default function PricingWizard({
             return;
         }
 
-        const cardElement = elements.getElement(CardElement);
-        if (!cardElement) {
+        const cardNumberElement = elements.getElement(CardNumberElement);
+        if (!cardNumberElement) {
             handleBookingSubmit(e);
             return;
         }
 
-        const { token, error } = await stripe.createToken(cardElement);
+        const { token, error } = await stripe.createToken(cardNumberElement, {
+            name: cardholderName,
+            address_country: country,
+        });
 
         if (error) {
-            alert(error.message);
+            setCardError(error.message);
             return;
         }
 
+        setCardError('');
         handleBookingSubmit(e, token.id);
     };
 
@@ -449,33 +456,71 @@ export default function PricingWizard({
                                     ></textarea>
                                 </div>
 
-                                {/* Stripe Credit Card Field */}
-                                <div className="bg-[#EAF2E8]/20 border border-[#3FAD00]/15 rounded-xl p-4 space-y-2">
-                                    <label className="text-xs text-[#2C7A00] font-semibold block">Credit or Debit Card</label>
-                                    <div className="bg-white rounded-lg p-3.5 border border-[#3FAD00]/20">
-                                        <CardElement 
-                                            options={{
-                                                style: {
-                                                    base: {
-                                                        fontSize: '14px',
-                                                        color: '#1F3612',
-                                                        fontFamily: 'Inter, system-ui, sans-serif',
-                                                        '::placeholder': {
-                                                            color: '#839086',
-                                                        },
-                                                    },
-                                                    invalid: {
-                                                        color: '#ef4444',
-                                                    },
-                                                },
-                                            }}
-                                        />
+                                {/* Stripe Payment Method */}
+                                <div className="border border-slate-200 rounded-xl overflow-hidden">
+                                    <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="2" y="5" width="20" height="14" rx="2" strokeWidth="1.5"/><path d="M2 10h20" strokeWidth="1.5"/></svg>
+                                        <span className="text-sm font-semibold text-slate-700">Card</span>
                                     </div>
-                                    {errors.stripe_token && (
-                                        <span className="text-xs text-red-500 font-semibold block mt-1">{errors.stripe_token}</span>
-                                    )}
-                                    <span className="text-[10px] text-[#839086] block">Secured via Stripe. Payments are encrypted and processed securely.</span>
+
+                                    <div className="p-4 space-y-3 bg-white">
+                                        {/* Card Number */}
+                                        <div>
+                                            <label className="text-xs font-medium text-slate-500 block mb-1">Card information</label>
+                                            <div className="border border-slate-300 rounded-t-lg px-3 py-2.5 focus-within:border-[#3FAD00] focus-within:ring-1 focus-within:ring-[#3FAD00] transition-all">
+                                                <CardNumberElement
+                                                    options={{ style: { base: { fontSize: '14px', color: '#1F3612', '::placeholder': { color: '#9ca3af' } }, invalid: { color: '#ef4444' } }, showIcon: true }}
+                                                />
+                                            </div>
+                                            <div className="grid grid-cols-2">
+                                                <div className="border border-t-0 border-r-0 border-slate-300 rounded-bl-lg px-3 py-2.5 focus-within:border-[#3FAD00] focus-within:ring-1 focus-within:ring-[#3FAD00] transition-all">
+                                                    <CardExpiryElement
+                                                        options={{ style: { base: { fontSize: '14px', color: '#1F3612', '::placeholder': { color: '#9ca3af' } }, invalid: { color: '#ef4444' } } }}
+                                                    />
+                                                </div>
+                                                <div className="border border-t-0 border-slate-300 rounded-br-lg px-3 py-2.5 focus-within:border-[#3FAD00] focus-within:ring-1 focus-within:ring-[#3FAD00] transition-all">
+                                                    <CardCvcElement
+                                                        options={{ style: { base: { fontSize: '14px', color: '#1F3612', '::placeholder': { color: '#9ca3af' } }, invalid: { color: '#ef4444' } } }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Cardholder Name */}
+                                        <div>
+                                            <label className="text-xs font-medium text-slate-500 block mb-1">Cardholder name</label>
+                                            <input
+                                                type="text"
+                                                value={cardholderName}
+                                                onChange={e => setCardholderName(e.target.value)}
+                                                placeholder="Full name on card"
+                                                className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-[#1F3612] placeholder-slate-400 focus:outline-none focus:border-[#3FAD00] focus:ring-1 focus:ring-[#3FAD00] transition-all"
+                                            />
+                                        </div>
+
+                                        {/* Country */}
+                                        <div>
+                                            <label className="text-xs font-medium text-slate-500 block mb-1">Country or region</label>
+                                            <select
+                                                value={country}
+                                                onChange={e => setCountry(e.target.value)}
+                                                className="w-full border border-slate-300 rounded-lg px-3 py-2.5 text-sm text-[#1F3612] focus:outline-none focus:border-[#3FAD00] focus:ring-1 focus:ring-[#3FAD00] transition-all bg-white"
+                                            >
+                                                <option value="PH">Philippines</option>
+                                                <option value="US">United States</option>
+                                                <option value="AU">Australia</option>
+                                                <option value="GB">United Kingdom</option>
+                                                <option value="CA">Canada</option>
+                                                <option value="SG">Singapore</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                {(cardError || errors.stripe_token) && (
+                                    <p className="text-xs text-red-500 font-semibold">{cardError || errors.stripe_token}</p>
+                                )}
+                                <p className="text-[10px] text-[#839086]">Payments are encrypted and processed securely via Stripe.</p>
                             </div>
                         )}
 

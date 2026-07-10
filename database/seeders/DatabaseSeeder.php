@@ -25,13 +25,23 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Seed Client User
-        $client = User::updateOrCreate(
-            ['email' => 'client@sparkleclean.com'],
+        // Seed Feby Admin (Sparkle Clean domain)
+        User::updateOrCreate(
+            ['email' => 'feby@sparkleclean.com'],
             [
-                'name' => 'John Doe',
-                'password' => Hash::make('password'),
-                'role' => 'client',
+                'name' => 'feby admin',
+                'password' => Hash::make('admin@123'),
+                'role' => 'admin',
+            ]
+        );
+
+        // Seed Feby Admin (MintyFresh domain)
+        User::updateOrCreate(
+            ['email' => 'feby@mintyfresh.com'],
+            [
+                'name' => 'feby admin',
+                'password' => Hash::make('admin@123'),
+                'role' => 'admin',
             ]
         );
 
@@ -44,7 +54,7 @@ class DatabaseSeeder extends Seeder
         // 4. Seed Mock Bookings
         $bookings = [
             [
-                'user_id' => $client->id,
+                'user_id' => null,
                 'customer_name' => 'John Doe',
                 'customer_email' => 'client@sparkleclean.com',
                 'customer_phone' => '+1 (555) 123-4567',
@@ -64,7 +74,7 @@ class DatabaseSeeder extends Seeder
                 'special_instructions' => 'Key is under the flowerpot. Watch out for the dog, he is friendly but jumps.',
             ],
             [
-                'user_id' => $client->id,
+                'user_id' => null,
                 'customer_name' => 'John Doe',
                 'customer_email' => 'client@sparkleclean.com',
                 'customer_phone' => '+1 (555) 123-4567',
@@ -124,7 +134,7 @@ class DatabaseSeeder extends Seeder
                 'special_instructions' => 'Office cleaning. Trash removal and vacuuming are main priorities. Access card is at security desk.',
             ],
             [
-                'user_id' => $client->id,
+                'user_id' => null,
                 'customer_name' => 'John Doe',
                 'customer_email' => 'client@sparkleclean.com',
                 'customer_phone' => '+1 (555) 123-4567',

@@ -184,12 +184,7 @@ export default function Welcome({ auth, cleaners }) {
                 {/* How It Works Section */}
                 <HowItWorks />
 
-                {/* Services Catalog */}
-                <Services 
-                    data={data}
-                    handleServiceSelect={handleServiceSelect}
-                    scrollToBooking={scrollToBooking}
-                />
+                <Services />
 
                 {/* Before & After Slider */}
                 <BeforeAfter />
